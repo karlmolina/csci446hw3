@@ -11,11 +11,15 @@ package csci446hw3;
  */
 public class Driver {
 
+    public static CaveFrame caveFrame;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Cave cave = new Cave(4);
+        caveFrame = new CaveFrame(cave, "WUMPUS WORLD");
+        caveFrame.f.repaint();
     }
     
 }
