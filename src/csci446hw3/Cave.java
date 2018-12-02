@@ -16,37 +16,44 @@ public class Cave {
     Room[][] rooms;
     Room wumpusRoom, goldRoom;
     int size;
+    Player player;
 
     public Cave(int size) {
+        
         this.size = size;
-        rooms = new Room[size][size];
+        rooms = new Room[size + 1][size + 1];
         Random rand = new Random();
 
         // Initialize rooms
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
                 // Initialize room
                 Room room = new Room(i, j);
                 rooms[i][j] = room;
             }
         }
+        
+        player = new Player(rooms[1][1]);
 
         // Set adjacent rooms
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
                 Room room = rooms[i][j];
-                if (i != 0) {
-                    room.adjacent[0] = rooms[i - 1][j];
+                // up
+                if (i != size) {
+                    room.adjacent[3] = rooms[i + 1][j];
                 }
-                if (i != size - 1) {
-                    room.adjacent[1] = rooms[i + 1][j];
+                // down
+                if (i != 1) {
+                    room.adjacent[1] = rooms[i - 1][j];
                 }
-
-                if (j != 0) {
+                // left
+                if (j != 1) {
                     room.adjacent[2] = rooms[i][j - 1];
                 }
-                if (j != size - 1) {
-                    room.adjacent[3] = rooms[i][j + 1];
+                // right
+                if (j != size) {
+                    room.adjacent[0] = rooms[i][j + 1];
                 }
             }
         }
@@ -54,9 +61,9 @@ public class Cave {
         // Set place of gold
         int gRow, gCol;
         do {
-            gRow = rand.nextInt(size);
-            gCol = rand.nextInt(size);
-        } while (gRow == 0 && gCol == 0);
+            gRow = rand.nextInt(size)+1;
+            gCol = rand.nextInt(size)+1;
+        } while (gRow == 1 && gCol == 1);
 
         goldRoom = rooms[gRow][gCol];
         goldRoom.gold = true;
@@ -65,9 +72,9 @@ public class Cave {
         // Set place of wumpus
         int wRow, wCol;
         do {
-            wRow = rand.nextInt(size);
-            wCol = rand.nextInt(size);
-        } while (wRow == 0 && wCol == 0);
+            wRow = rand.nextInt(size)+1;
+            wCol = rand.nextInt(size)+1;
+        } while (wRow == 1 && wCol == 1);
 
         wumpusRoom = rooms[wRow][wCol];
         wumpusRoom.wumpus = true;
@@ -81,17 +88,19 @@ public class Cave {
         // Generate pits
         for (Room[] roomArray : rooms) {
             for (Room room : roomArray) {
-                // 20 percent chance to generate pit
-                if (rand.nextDouble() > 0.8) {
-                    if (room.row != 0 && room.col != 0) {
-                        room.pit = true;
+                if (room != null) {
+                    // 20 percent chance to generate pit
+                    if (rand.nextDouble() > 0.8) {
+                        if (!(room.row == 1 && room.col == 1)) {
+                            room.pit = true;
+                        }
                     }
-                }
 
-                if (room.pit) {
-                    for (Room adjRoom : room.adjacent) {
-                        if (adjRoom != null) {
-                            adjRoom.breeze = true;
+                    if (room.pit) {
+                        for (Room adjRoom : room.adjacent) {
+                            if (adjRoom != null) {
+                                adjRoom.breeze = true;
+                            }
                         }
                     }
                 }

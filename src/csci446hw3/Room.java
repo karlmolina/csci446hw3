@@ -14,6 +14,8 @@ class Room {
     int col, row;
     boolean visited, wumpus, pit, gold, stench, breeze, glitter, bump;
 
+    // indices correspond to direction
+    // 0,     1,    2,     3
     // up, down, left, right
     Room[] adjacent = new Room[4];
 
@@ -57,5 +59,9 @@ class Room {
         }
         
         return output;
+    }
+    
+    String position() {
+        return col + "," + row;
     }
 }

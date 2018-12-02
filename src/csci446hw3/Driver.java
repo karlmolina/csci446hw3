@@ -5,6 +5,8 @@
  */
 package csci446hw3;
 
+import java.awt.GraphicsEnvironment;
+
 /**
  *
  * @author h89q624
@@ -12,6 +14,7 @@ package csci446hw3;
 public class Driver {
 
     public static CaveFrame caveFrame;
+
     /**
      * @param args the command line arguments
      */
@@ -19,7 +22,9 @@ public class Driver {
         // TODO code application logic here
         Cave cave = new Cave(4);
         caveFrame = new CaveFrame(cave, "WUMPUS WORLD");
+        caveFrame.f.validate();
         caveFrame.f.repaint();
+        
+        Solver.solve(cave);
     }
-    
 }
