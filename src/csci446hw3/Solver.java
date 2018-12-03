@@ -6,6 +6,7 @@
 package csci446hw3;
 
 import static csci446hw3.Driver.caveFrame;
+import csci446hw3.Room.Status;
 import java.util.ArrayList;
 
 /**
@@ -13,18 +14,19 @@ import java.util.ArrayList;
  * @author Karl
  */
 public class Solver {
+
     public static void solve(Cave cave) {
         ArrayList<Room> safe = new ArrayList<>();
         ArrayList<Room> dangerous = new ArrayList<>();
         ArrayList<Room> visited = new ArrayList<>();
         ArrayList<Room> safeNotVisited = new ArrayList<>();
-        
+
         Player player = cave.player;
-        
+
         Room currentRoom = player.room;
-        
+
         currentRoom.visited = true;
-        
+
         if (currentRoom.breeze || currentRoom.stench) {
             for (Room adjRoom : currentRoom.adjacent) {
                 if (adjRoom != null && !adjRoom.visited) {
@@ -38,17 +40,117 @@ public class Solver {
                 }
             }
         }
-        
-        while(!safeNotVisited.isEmpty()) {
-            
+
+        while (!safeNotVisited.isEmpty()) {
+
         }
-        while(!dangerous.isEmpty()) {
-            
+        while (!dangerous.isEmpty()) {
+
         }
-        
-        
-        
+
         caveFrame.f.validate();
         caveFrame.f.repaint();
+    }
+
+    static void solve2(Cave cave) {
+
+        dfs(cave);
+        dfs(cave);
+    }
+
+    static Room dfs(Cave cave) {
+        Room currentRoom = cave.player.room;
+        currentRoom.visited = true;
+
+        for (Room neighbor : currentRoom.neighbors) {
+            if (neighbor.visited) {
+                continue;
+            }
+            if (currentRoom.breeze) {
+                if (neighbor.pitStatus == Status.Unknown) {
+                    neighbor.pitStatus = Status.Dangerous;
+                }
+            } else {
+                neighbor.pitStatus = Status.Safe;
+            }
+            if (currentRoom.stench) {
+                if (neighbor.wumpusStatus == Status.Unknown) {
+                    neighbor.wumpusStatus = Status.Dangerous;
+                }
+            } else {
+                neighbor.wumpusStatus = Status.Safe;
+            }
+        }
+
+        if (currentRoom.breeze || currentRoom.stench || currentRoom.gold) {
+            return currentRoom;
+        }
+
+        for (Room room : cave.player.room.neighbors) {
+            if (room.wumpusStatus == Status.Safe && room.pitStatus == Status.Safe) {
+                cave.player.room = room;
+            }
+
+            caveFrame.f.validate();
+            caveFrame.f.repaint();
+            return dfs(cave);
+        }
+        return null;
+    }
+
+    static Room dfs2(Cave cave, Room room) {
+        boolean check = false;
+        for (Room neighbor : room.neighbors) {
+            if (neighbor.visited) {
+                continue;
+            }
+            if (room.breeze) {
+                if (neighbor.pitStatus == Status.Unknown) {
+                    neighbor.pitStatus = Status.Dangerous;
+                }
+            } else {
+                neighbor.pitStatus = Status.Safe;
+            }
+            if (room.stench) {
+                if (neighbor.wumpusStatus == Status.Unknown) {
+                    neighbor.wumpusStatus = Status.Dangerous;
+                }
+            } else {
+                neighbor.wumpusStatus = Status.Safe;
+            }
+        }
+        for (Room neighbor : room.neighbors) {
+            if (!neighbor.visited && neighbor.wumpusStatus == Status.Safe
+                    && neighbor.pitStatus == Status.Safe) {
+                check = true;
+            }
+        }
+        if (check) {
+            for (Room neighbor : room.neighbors) {
+                if (cave.player.hasGold) {
+                    cave.player.room = room;
+                    return room;
+                }
+                if (!neighbor.visited && neighbor.wumpusStatus == Status.Safe
+                        && neighbor.pitStatus == Status.Safe) {
+                    cave.player.move(neighbor);
+                    caveFrame.f.validate();
+                    caveFrame.f.repaint();
+                    if (cave.player.room.gold) {
+                        cave.player.hasGold = true;
+                    }
+                    dfs2(cave, neighbor);
+                    cave.player.room = room;
+                    cave.player.move(room);
+                    caveFrame.f.validate();
+                    caveFrame.f.repaint();
+                    System.out.println();
+                }
+            }
+        } else {
+            return room;
+        }
+
+        return null;
     }
 }

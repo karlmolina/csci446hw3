@@ -16,6 +16,7 @@ public class Player {
     public Player(Room startRoom) {
         direction = 0;
         room = startRoom;
+        room.visited = true;
     }
     
     // index of Room.adjacent
@@ -33,6 +34,11 @@ public class Player {
     
     public Room goForward() {
         return room = room.adjacent[direction];
+    }
+    
+    public void move(Room room) {
+        this.room = room;
+        this.room.visited = true;
     }
     
     public int getRow() {
