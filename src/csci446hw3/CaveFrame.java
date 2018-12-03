@@ -82,12 +82,12 @@ public class CaveFrame {
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
 
-            for (int i = 1; i <= cave.size; i++) {
-                for (int j = 1; j <= cave.size; j++) {
-                    Room room = cave.rooms[i][j];
+            for (int col = 1; col <= cave.size; col++) {
+                for (int row = 1; row <= cave.size; row++) {
+                    Room room = cave.rooms[col][row];
 
-                    int x = (j - 1) * NODE_SIZE;
-                    int y = (cave.size - i) * NODE_SIZE;
+                    int y = (cave.size - row ) * NODE_SIZE;
+                    int x = (col - 1) * NODE_SIZE;
                     g.drawRect(x, y, NODE_SIZE, NODE_SIZE);
 
                     g.drawString(room.position(), x + 2, y + 2 + this.getFont().getSize());

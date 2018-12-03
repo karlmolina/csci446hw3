@@ -11,11 +11,14 @@ package csci446hw3;
  */
 public class Player {
     boolean heardScream, hasArrow = true, hasGold;
+    int moves = 0;
     Room room;
+    boolean dead;
     
     public Player(Room startRoom) {
         direction = 0;
         room = startRoom;
+        room.visited = true;
     }
     
     // index of Room.adjacent
@@ -33,6 +36,12 @@ public class Player {
     
     public Room goForward() {
         return room = room.adjacent[direction];
+    }
+    
+    public void move(Room room) {
+        this.room = room;
+        this.room.visited = true;
+        moves++;
     }
     
     public int getRow() {

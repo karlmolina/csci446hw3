@@ -6,6 +6,7 @@
 package csci446hw3;
 
 import java.awt.GraphicsEnvironment;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -18,13 +19,21 @@ public class Driver {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         // TODO code application logic here
-        Cave cave = new Cave(4);
+        Cave cave = new Cave(10);
+        //Cave cave = new Cave("data/testworld2.txt");
         caveFrame = new CaveFrame(cave, "WUMPUS WORLD");
         caveFrame.f.validate();
         caveFrame.f.repaint();
-        
-        Solver.solve(cave);
+
+        Solver.solve2(cave);
+        int score = -cave.player.moves;
+        if (cave.player.hasGold) {
+            score += 1000;
+        }
+
+        System.out.println("Score: " + score);
+        System.out.println("done");
     }
 }
