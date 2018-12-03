@@ -21,13 +21,19 @@ public class Driver {
      */
     public static void main(String[] args) throws FileNotFoundException {
         // TODO code application logic here
-        //Cave cave = new Cave(4);
-        Cave cave = new Cave("data/testworld2.txt");
+        Cave cave = new Cave(10);
+        //Cave cave = new Cave("data/testworld2.txt");
         caveFrame = new CaveFrame(cave, "WUMPUS WORLD");
         caveFrame.f.validate();
         caveFrame.f.repaint();
-        
-        Solver.dfs2(cave, cave.player.room);
+
+        Solver.solve2(cave);
+        int score = -cave.player.moves;
+        if (cave.player.hasGold) {
+            score += 1000;
+        }
+
+        System.out.println("Score: " + score);
         System.out.println("done");
     }
 }

@@ -11,7 +11,9 @@ package csci446hw3;
  */
 public class Player {
     boolean heardScream, hasArrow = true, hasGold;
+    int moves = 0;
     Room room;
+    boolean dead;
     
     public Player(Room startRoom) {
         direction = 0;
@@ -39,6 +41,7 @@ public class Player {
     public void move(Room room) {
         this.room = room;
         this.room.visited = true;
+        moves++;
     }
     
     public int getRow() {

@@ -52,12 +52,6 @@ public class Solver {
         caveFrame.f.repaint();
     }
 
-    static void solve2(Cave cave) {
-
-        dfs(cave);
-        dfs(cave);
-    }
-
     static Room dfs(Cave cave) {
         Room currentRoom = cave.player.room;
         currentRoom.visited = true;
@@ -96,6 +90,29 @@ public class Solver {
             return dfs(cave);
         }
         return null;
+    }
+
+    static void solve2(Cave cave) {
+        dfs2(cave, cave.player.room);
+        
+        while (!cave.player.hasGold) {
+            boolean breakcheck = false;
+            for (Room[] roomArray : cave.rooms) {
+                for (Room room : roomArray) {
+                    if (room != null) {
+                        if (!breakcheck && (room.pitStatus == Status.Dangerous || room.wumpusStatus == Status.Dangerous)) {
+                            room.pitStatus = Status.Safe;
+                            room.wumpusStatus = Status.Safe;
+                            breakcheck = true;
+                        }
+                        room.visited = false;
+                    }
+                }
+            }
+            if (dfs2(cave, cave.player.room) == null) {
+                break;
+            };
+        }
     }
 
     static Room dfs2(Cave cave, Room room) {
@@ -139,12 +156,25 @@ public class Solver {
                     if (cave.player.room.gold) {
                         cave.player.hasGold = true;
                     }
+                    if (cave.player.room.pit) {
+                        System.out.println("Fallen into a pit (rip)");
+                        cave.player.dead = true;
+                    }
+                    if (cave.player.room.wumpus) {
+                        System.out.println("Death by Wumpus");
+                        cave.player.dead = true;
+                    }
+                    if (cave.player.dead) {
+                        return null;
+                    }
                     dfs2(cave, neighbor);
-                    cave.player.room = room;
+                    if (cave.player.dead) {
+                        return null;
+                    }
                     cave.player.move(room);
                     caveFrame.f.validate();
                     caveFrame.f.repaint();
-                    System.out.println();
+                    System.out.print("");
                 }
             }
         } else {
