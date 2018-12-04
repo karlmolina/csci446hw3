@@ -7,16 +7,16 @@ package csci446hw3;
 
 import static csci446hw3.Driver.caveFrame;
 import csci446hw3.Room.Status;
-import java.util.ArrayList;
 
 /**
  *
  * @author Karl
  */
 public class Solver {
+
     static void solve(Cave cave) {
         solveRecursive(cave, cave.player.room);
-        
+
         while (!cave.player.hasGold) {
             boolean breakcheck = false;
             for (Room[] roomArray : cave.rooms) {
@@ -31,10 +31,20 @@ public class Solver {
                     }
                 }
             }
-            if (solveRecursive(cave, cave.player.room) == null) {
+            solveRecursive(cave, cave.player.room);
+            if (cave.player.dead) {
                 break;
             };
         }
+        
+        System.out.println("Cells entered (moves made) " + cave.player.moves);
+        
+        int score = -cave.player.moves;
+        if (cave.player.hasGold) {
+            score += 1000;
+        }
+
+        System.out.println("Score: " + score);
     }
 
     static Room solveRecursive(Cave cave, Room room) {
@@ -76,6 +86,7 @@ public class Solver {
                     caveFrame.f.validate();
                     caveFrame.f.repaint();
                     if (cave.player.room.gold) {
+                        System.out.println("Found gold.");
                         cave.player.hasGold = true;
                     }
                     if (cave.player.room.pit) {
