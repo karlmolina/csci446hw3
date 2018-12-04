@@ -5,7 +5,6 @@
  */
 package csci446hw3;
 
-import java.awt.GraphicsEnvironment;
 import java.io.FileNotFoundException;
 
 /**
@@ -27,7 +26,7 @@ public class Driver {
         caveFrame.f.validate();
         caveFrame.f.repaint();
 
-        Solver.solve2(cave);
+        Solver.solve(cave);
         int score = -cave.player.moves;
         if (cave.player.hasGold) {
             score += 1000;

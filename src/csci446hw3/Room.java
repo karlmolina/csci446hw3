@@ -17,7 +17,6 @@ class Room {
     boolean visited, wumpus, pit, gold, stench, breeze, glitter, bump;
     
     // don't know = 0, know safe = 1, know not safe = 2
-    
     enum Status {
         Unknown,
         Safe,

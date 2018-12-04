@@ -64,7 +64,7 @@ public class SolverTest {
         
         Solver instance = new Solver();
         Room expResult = null;
-        Room result = instance.dfs2(cave, cave.player.room);
+        Room result = instance.solveRecursive(cave, cave.player.room);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

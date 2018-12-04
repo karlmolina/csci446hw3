@@ -14,86 +14,8 @@ import java.util.ArrayList;
  * @author Karl
  */
 public class Solver {
-
-    public static void solve(Cave cave) {
-        ArrayList<Room> safe = new ArrayList<>();
-        ArrayList<Room> dangerous = new ArrayList<>();
-        ArrayList<Room> visited = new ArrayList<>();
-        ArrayList<Room> safeNotVisited = new ArrayList<>();
-
-        Player player = cave.player;
-
-        Room currentRoom = player.room;
-
-        currentRoom.visited = true;
-
-        if (currentRoom.breeze || currentRoom.stench) {
-            for (Room adjRoom : currentRoom.adjacent) {
-                if (adjRoom != null && !adjRoom.visited) {
-                    dangerous.add(adjRoom);
-                }
-            }
-        } else {
-            for (Room adjRoom : currentRoom.adjacent) {
-                if (adjRoom != null && !adjRoom.visited) {
-                    safeNotVisited.add(adjRoom);
-                }
-            }
-        }
-
-        while (!safeNotVisited.isEmpty()) {
-
-        }
-        while (!dangerous.isEmpty()) {
-
-        }
-
-        caveFrame.f.validate();
-        caveFrame.f.repaint();
-    }
-
-    static Room dfs(Cave cave) {
-        Room currentRoom = cave.player.room;
-        currentRoom.visited = true;
-
-        for (Room neighbor : currentRoom.neighbors) {
-            if (neighbor.visited) {
-                continue;
-            }
-            if (currentRoom.breeze) {
-                if (neighbor.pitStatus == Status.Unknown) {
-                    neighbor.pitStatus = Status.Dangerous;
-                }
-            } else {
-                neighbor.pitStatus = Status.Safe;
-            }
-            if (currentRoom.stench) {
-                if (neighbor.wumpusStatus == Status.Unknown) {
-                    neighbor.wumpusStatus = Status.Dangerous;
-                }
-            } else {
-                neighbor.wumpusStatus = Status.Safe;
-            }
-        }
-
-        if (currentRoom.breeze || currentRoom.stench || currentRoom.gold) {
-            return currentRoom;
-        }
-
-        for (Room room : cave.player.room.neighbors) {
-            if (room.wumpusStatus == Status.Safe && room.pitStatus == Status.Safe) {
-                cave.player.room = room;
-            }
-
-            caveFrame.f.validate();
-            caveFrame.f.repaint();
-            return dfs(cave);
-        }
-        return null;
-    }
-
-    static void solve2(Cave cave) {
-        dfs2(cave, cave.player.room);
+    static void solve(Cave cave) {
+        solveRecursive(cave, cave.player.room);
         
         while (!cave.player.hasGold) {
             boolean breakcheck = false;
@@ -109,13 +31,13 @@ public class Solver {
                     }
                 }
             }
-            if (dfs2(cave, cave.player.room) == null) {
+            if (solveRecursive(cave, cave.player.room) == null) {
                 break;
             };
         }
     }
 
-    static Room dfs2(Cave cave, Room room) {
+    static Room solveRecursive(Cave cave, Room room) {
         boolean check = false;
         for (Room neighbor : room.neighbors) {
             if (neighbor.visited) {
@@ -167,7 +89,7 @@ public class Solver {
                     if (cave.player.dead) {
                         return null;
                     }
-                    dfs2(cave, neighbor);
+                    solveRecursive(cave, neighbor);
                     if (cave.player.dead) {
                         return null;
                     }

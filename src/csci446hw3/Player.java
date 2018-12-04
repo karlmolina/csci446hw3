@@ -16,26 +16,8 @@ public class Player {
     boolean dead;
     
     public Player(Room startRoom) {
-        direction = 0;
         room = startRoom;
         room.visited = true;
-    }
-    
-    // index of Room.adjacent
-    // right, down, left, up
-    // 0, 1, 2, 3
-    int direction;
-    
-    public void turnRight() {
-        direction = ++direction % 4;
-    }
-    
-    public void turnLeft() {
-        direction = --direction % 4;
-    }
-    
-    public Room goForward() {
-        return room = room.adjacent[direction];
     }
     
     public void move(Room room) {
@@ -47,6 +29,7 @@ public class Player {
     public int getRow() {
         return room.row;
     }
+    
     public int getCol() {
         return room.col;
     }

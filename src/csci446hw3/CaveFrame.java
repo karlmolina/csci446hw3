@@ -51,8 +51,7 @@ public class CaveFrame {
 
         Cave cave;
         int mouseX, mouseY;
-        Image breeze, v, stench, wumpus, gold, pit;
-        Image[] player = new Image[4];
+        Image breeze, v, stench, wumpus, gold, pit, player;
 
         public BoardPanel(Cave cave) {
             this.cave = cave;
@@ -64,10 +63,7 @@ public class CaveFrame {
             wumpus = t.getImage("images/wumpus.gif");
             gold = t.getImage("images/gold.gif");
             pit = t.getImage("images/pit.gif");
-            player[3] = t.getImage("images/player_up.gif");
-            player[1] = t.getImage("images/player_down.gif");
-            player[2] = t.getImage("images/player_left.gif");
-            player[0] = t.getImage("images/player_right.gif");
+            player = t.getImage("images/player_right.gif");
         }
 
         /**
@@ -111,7 +107,7 @@ public class CaveFrame {
             }
             
             Player p = cave.player;
-            g.drawImage(player[p.direction], (p.getCol()-1)*NODE_SIZE, (cave.size - p.getRow())*NODE_SIZE, this);
+            g.drawImage(player, (p.getCol()-1)*NODE_SIZE, (cave.size - p.getRow())*NODE_SIZE, this);
 
             g.drawString(mouseX + "," + mouseY, 10, this.getSize().height - 5);
         }
