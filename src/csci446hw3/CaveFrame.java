@@ -30,7 +30,7 @@ public class CaveFrame {
     JFrame f;
 
     /**
-     * BoardFrame constructor
+     * CaveFrame constructor
      *
      * @param board
      * @param title
@@ -57,6 +57,7 @@ public class CaveFrame {
             this.cave = cave;
             addMouseMotionListener(this);
             Toolkit t = Toolkit.getDefaultToolkit();
+            // Initialize the graphics images
             breeze = t.getImage("images/breeze.gif");
             v = t.getImage("images/visisted.gif");
             stench = t.getImage("images/stench.gif");
@@ -78,6 +79,7 @@ public class CaveFrame {
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
 
+            // Draw each room depending on what they contain
             for (int col = 1; col <= cave.size; col++) {
                 for (int row = 1; row <= cave.size; row++) {
                     Room room = cave.rooms[col][row];
@@ -86,8 +88,10 @@ public class CaveFrame {
                     int x = (col - 1) * NODE_SIZE;
                     g.drawRect(x, y, NODE_SIZE, NODE_SIZE);
 
+                    // Draw the position of the room
                     g.drawString(room.position(), x + 2, y + 2 + this.getFont().getSize());
 
+                    // Draw images of what is inside of the rooms
                     if (room.breeze && !room.pit) {
                         g.drawImage(breeze, x, y, this);
                     }
@@ -107,8 +111,10 @@ public class CaveFrame {
             }
             
             Player p = cave.player;
+            // Draw the player
             g.drawImage(player, (p.getCol()-1)*NODE_SIZE, (cave.size - p.getRow())*NODE_SIZE, this);
 
+            // Draw the position of the mouse
             g.drawString(mouseX + "," + mouseY, 10, this.getSize().height - 5);
         }
 
